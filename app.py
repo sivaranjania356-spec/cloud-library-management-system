@@ -59,10 +59,13 @@ def dashboard():
 # ---------------- BOOK LIST ----------------
 @app.route("/books")
 def books():
-    cursor.execute("SELECT * FROM books")
-    data = cursor.fetchall()
+    if "user" not in session:
+        return redirect("/")
 
-    return str(data)
+    cursor.execute("SELECT * FROM books")
+    books = cursor.fetchall()
+
+    return render_template("books.html", books=books)
 
 
 # ---------------- ADD BOOK ----------------
