@@ -1,17 +1,20 @@
 from flask import Flask, render_template, request, redirect, session
+import mysql.connector
+import os
 
 app = Flask(__name__)
 app.secret_key = "library_secret_key"
 
-# ---------------- TEMP DISABLE DB (FOR DEPLOY TEST) ----------------
-# mysql.connector.connect(
-#     host="localhost",
-#     user="root",
-#     password="",
-#     database="library_db"
-# )
+# Railway MySQL Connection
+db = mysql.connector.connect(
+    host=os.getenv("DB_HOST"),
+    port=int(os.getenv("DB_PORT")),
+    user=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASSWORD"),
+    database=os.getenv("DB_NAME")
+)
 
-# cursor = db.cursor()
+cursor = db.cursor()
 
 
 # ---------------- LOGIN ----------------
@@ -21,15 +24,20 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
 
-        # TEMP FIX (no DB)
-        if username == "admin" and password == "admin":
+        cursor.execute(
+            "SELECT * FROM admin WHERE username=%s AND password=%s",
+            (username, password)
+        )
+
+        admin = cursor.fetchone()
+
+        if admin:
             session["user"] = username
             return redirect("/dashboard")
 
         return "Invalid Login ❌"
 
     return render_template("login.html")
-
 
 # ---------------- DASHBOARD ----------------
 @app.route("/dashboard")
