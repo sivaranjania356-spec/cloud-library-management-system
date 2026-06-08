@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Books</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static',filename='style.css') }}">
+
+</head>
+
+<body>
+
+<h2>Book List</h2>
+
+<table>
+
+<tr>
+<th>ID</th>
+<th>Title</th>
+<th>Author</th>
+<th>Category</th>
+<th>Quantity</th>
+<th>Action</th>
+</tr>
+
+{% for book in books %}
+
+<tr>
+
+<td>{{ book[0] }}</td>
+<td>{{ book[1] }}</td>
+<td>{{ book[2] }}</td>
+<td>{{ book[3] }}</td>
+<td>{{ book[4] }}</td>
+
+<td>
+<a href="/delete/{{ book[0] }}">
+Delete
+</a>
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</body>
+</html>

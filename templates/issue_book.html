@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Issue Book</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static',filename='style.css') }}">
+</head>
+
+<body>
+
+<h2>Issue Book</h2>
+
+<form method="POST">
+
+<input type="text"
+name="student_name"
+placeholder="Student Name"
+required>
+
+<input type="text"
+name="book_title"
+placeholder="Book Title"
+required>
+
+<input type="date"
+name="issue_date"
+required>
+
+<button type="submit">
+Issue Book
+</button>
+
+</form>
+
+</body>
+</html>
