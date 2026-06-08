@@ -5,7 +5,15 @@ import os
 app = Flask(__name__)
 app.secret_key = "library_secret_key"
 
-# Railway MySQL Connection
+# db = mysql.connector.connect(
+#     host="localhost",
+#     user="root",
+#     password="",
+#     database="library_db"
+# )
+# cursor = db.cursor()
+
+Railway MySQL Connection
 db = mysql.connector.connect(
     host=os.getenv("DB_HOST"),
     port=int(os.getenv("DB_PORT")),
@@ -51,10 +59,10 @@ def dashboard():
 # ---------------- BOOK LIST ----------------
 @app.route("/books")
 def books():
-    if "user" not in session:
-        return redirect("/")
+    cursor.execute("SELECT * FROM books")
+    data = cursor.fetchall()
 
-    return render_template("books.html", books=[])
+    return str(data)
 
 
 # ---------------- ADD BOOK ----------------
@@ -64,6 +72,17 @@ def add_book():
         return redirect("/")
 
     if request.method == "POST":
+        title = request.form["title"]
+        author = request.form["author"]
+        category = request.form["category"]
+        quantity = request.form["quantity"]
+
+        cursor.execute(
+            "INSERT INTO books(title, author, category, quantity) VALUES (%s,%s,%s,%s)",
+            (title, author, category, quantity)
+        )
+
+        db.commit()
         return redirect("/books")
 
     return render_template("add_book.html")
@@ -108,5 +127,7 @@ def logout():
 
 print("STARTING LIBRARY PROJECT")
 
+# if __name__ == "__main__":
+#     app.run(debug=True)
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
