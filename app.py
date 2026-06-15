@@ -13,7 +13,7 @@ app.secret_key = "library_secret_key"
 # )
 # cursor = db.cursor()
 
-Railway MySQL Connection
+# Railway MySQL Connection
 db = mysql.connector.connect(
     host=os.getenv("DB_HOST"),
     port=int(os.getenv("DB_PORT")),
